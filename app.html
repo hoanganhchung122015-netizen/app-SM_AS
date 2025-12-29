@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Học Tập AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .expert-btn { display: none; }
+        #resultArea { white-space: pre-wrap; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div id="setup" class="bg-white p-4 rounded-lg shadow-md mb-4">
+        <input type="password" id="apiKey" placeholder="Dán API Key từ AI Studio vào đây..." class="w-full p-2 border rounded">
+        <p class="text-xs text-gray-500 mt-1">Chỉ cần dán 1 lần, không cần chỉnh code.</p>
+    </div>
+
+    <div id="homePage" class="grid grid-cols-2 gap-4 mt-10">
+        <button onclick="openSubject('TOÁN')" class="h-32 bg-blue-500 text-white rounded-2xl text-xl font-bold">TOÁN</button>
+        <button onclick="openSubject('LÝ')" class="h-32 bg-red-500 text-white rounded-2xl text-xl font-bold">LÝ</button>
+        <button onclick="openSubject('HÓA')" class="h-32 bg-green-500 text-white rounded-2xl text-xl font-bold">HÓA</button>
+        <button onclick="showJournal()" class="h-32 bg-yellow-500 text-white rounded-2xl text-xl font-bold">NHẬT KÝ</button>
+    </div>
+
+    <div id="actionPage" class="hidden space-y-4">
+        <button onclick="goBack()" class="text-blue-500 font-bold">← Quay lại</button>
+        <h2 id="currentSub" class="text-2xl font-bold text-center"></h2>
+        <div class="grid grid-cols-3 gap-2">
+            <button class="bg-gray-200 p-4 rounded-lg text-sm">📸 Camera</button>
+            <input type="file" id="fileInput" class="hidden">
+            <button onclick="document.getElementById('fileInput').click()" class="bg-gray-200 p-4 rounded-lg text-sm">📁 Tải ảnh</button>
+            <button class="bg-gray-200 p-4 rounded-lg text-sm">🎤 Micro</button>
+        </div>
+        <textarea id="userInput" placeholder="Hoặc nhập đề bài tại đây..." class="w-full h-32 p-2 border rounded"></textarea>
+        <button onclick="solve()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg">THỰC HIỆN</button>
+        
+        <div id="resultBox" class="hidden bg-white p-4 rounded-lg shadow-inner mt-4">
+            <div class="flex gap-2 mb-4 overflow-x-auto">
+                <button onclick="viewExpert(1)" class="bg-orange-100 p-2 rounded text-xs shrink-0">Chuyên gia 1: CASIO</button>
+                <button onclick="viewExpert(2)" class="bg-blue-100 p-2 rounded text-xs shrink-0">Chuyên gia 2: GIA SƯ</button>
+                <button onclick="viewExpert(3)" class="bg-purple-100 p-2 rounded text-xs shrink-0">Chuyên gia 3: LUYỆN SKILL</button>
+            </div>
+            <div id="resultContent" class="text-gray-800 text-sm italic">Đang chờ kết quả...</div>
+            <button onclick="speak()" class="mt-4 bg-gray-800 text-white p-2 rounded-full">🔊 Đọc kết quả</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSubject = "";
+        function openSubject(sub) {
+            currentSubject = sub;
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('actionPage').classList.remove('hidden');
+            document.getElementById('currentSub').innerText = "MÔN " + sub;
+        }
+        function goBack() {
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('actionPage').classList.add('hidden');
+        }
+        
+        async function solve() {
+            const key = document.getElementById('apiKey').value;
+            if(!key) return alert("Hãy dán API Key vào ô trên cùng!");
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('resultContent').innerText = "AI đang giải bài, vui lòng đợi...";
+            
+            // Logic gọi Gemini API sẽ nằm ở đây (mô phỏng để bạn thấy giao diện)
+            setTimeout(() => {
+                document.getElementById('resultContent').innerText = "Đã có lời giải! Hãy chọn Chuyên gia để xem chi tiết.";
+            }, 2000);
+        }
+
+        function speak() {
+            const text = document.getElementById('resultContent').innerText;
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'vi-VN';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
